@@ -6,29 +6,35 @@
 
 typedef struct CString
 {
-    int length;
+    unsigned int length;
     char* chars;
 }CString;
+
+const char* getString(struct CString* str)
+{
+    return str -> chars;
+}
 
 CString* cstring_new(const char* str)
 {
     CString* cNewString;
     cNewString = malloc(sizeof(CString));
     if(cNewString == 0) return NULL;
-    cNewString->length = strlen(str);
+    cNewString->length = strnlen(str, sizeof str);
     cNewString->chars = malloc(cNewString->length);
+    if(cNewString->chars == 0) return NULL;
     strncpy(cNewString->chars,str,cNewString->length);
     return cNewString;
 }
 
-int iStringLength(struct CString* str)
+unsigned int iStringLength(struct CString* str)
 {
     return str->length;
 }
 
 char chCharAt(struct CString* str,int index)
 {
-    if(index >= str->length) return '-';
+    if(index >= str->length || index < 0) return '\0';
     return str->chars[index];
 }
 
@@ -46,14 +52,16 @@ int main() {
     assert(chCharAt(str,1)=='l');
     assert(bChangeCharAt(str,1,'b')==true);
     assert(chCharAt(str,1)=='b');
+    assert(strcmp(getString(str),"oba")==0);
 
 
     CString* str1;
     str1 = cstring_new("");
     assert(iStringLength(str1)==0);
-    assert(chCharAt(str1,0)=='-');
+    assert(chCharAt(str1,0)=='\0');
     assert(bChangeCharAt(str1,0,'b')==false);
-    assert(chCharAt(str1,0)=='-');
+    assert(chCharAt(str1,0)=='\0');
+    assert(strcmp(getString(str1),"")==0);
 
 
     return 0;
