@@ -1,44 +1,44 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
 #include <assert.h>
+#include <stddef.h>
 
 typedef struct CString
 {
-    unsigned int length;
+    size_t length;
     char* chars;
 }CString;
 
-const char* getString(struct CString* str)
+const char* getString(CString* str)
 {
-    return str -> chars;
+    return str->chars;
 }
 
 CString* cstring_new(const char* str)
 {
     CString* cNewString;
     cNewString = malloc(sizeof(CString));
-    if(cNewString == 0) return NULL;
-    cNewString->length = strnlen(str, sizeof str);
-    cNewString->chars = malloc(cNewString->length);
-    if(cNewString->chars == 0) return NULL;
-    strncpy(cNewString->chars,str,cNewString->length);
+    if(cNewString == NULL) return NULL;
+    cNewString->length = strlen(str);
+    cNewString->chars = malloc(cNewString->length+1);
+    if(cNewString->chars == NULL) return NULL;
+    strncpy(cNewString->chars,str,cNewString->length+1);
     return cNewString;
 }
 
-unsigned int iStringLength(struct CString* str)
+size_t iStringLength(CString* str)
 {
     return str->length;
 }
 
-char chCharAt(struct CString* str,int index)
+char chCharAt(CString* str,size_t index)
 {
     if(index >= str->length || index < 0) return '\0';
     return str->chars[index];
 }
 
-bool bChangeCharAt(struct CString* str,int index, char newChar)
+bool bChangeCharAt(CString* str,size_t index, char newChar)
 {
     if( index >= str->length) return false;
     str->chars[index] = newChar;
@@ -63,6 +63,8 @@ int main() {
     assert(chCharAt(str1,0)=='\0');
     assert(strcmp(getString(str1),"")==0);
 
+    free(str->chars);
+    free(str);
 
     return 0;
 }
