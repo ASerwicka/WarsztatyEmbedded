@@ -34,7 +34,7 @@ size_t iStringLength(CString* str)
 
 char chCharAt(CString* str,size_t index)
 {
-    if(index >= str->length || index < 0) return '\0';
+    if(index >= str->length) return '\0';
     return str->chars[index];
 }
 
@@ -65,6 +65,8 @@ int main() {
 
     free(str->chars);
     free(str);
+    free(str1->chars);
+    free(str1);
 
     return 0;
 }
