@@ -52,6 +52,13 @@ void insert(int key,int data) {
     hashArray[hashIndex] = item;
 }
 
+void clear(){
+    for(int i = 0; i<SIZE; i++) {
+        if(hashArray[i] != NULL)
+            delete(hashArray[i]);
+    }
+}
+
 struct DataItem* delete(struct DataItem* item) {
     int key = item->key;
 
